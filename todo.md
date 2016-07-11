@@ -29,7 +29,7 @@ Done on my own:
 
 # Week 4
 To do:
-* [ ] Change current servlet to "slim servlet" - delegate code to some controller
+* [x] Change current servlet to "slim servlet" - delegate code to some controller
 * [ ] Change #todo-list li style - border-bottom makes front button broken
 * [ ] Disable "clear completed" when there are no items completed
 * [ ] Find better front-end
