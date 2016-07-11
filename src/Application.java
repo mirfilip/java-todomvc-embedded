@@ -30,14 +30,15 @@ public class Application implements Controller {
         }
     }
 
-    public Map<String, Collection<Todo>> handle(String requestUri, Map<String, String[]> params) {
+    public Map<String, Collection<Todo>> handle(String requestMethod, String requestUri, Map<String, String[]> params) {
         String command = parseCommand(requestUri);
-        return dispatchControl(command, params);
+        return dispatchControl(requestMethod, command, params);
     }
 
-    Map<String, Collection<Todo>> dispatchControl(String command, Map<String, String[]> params) {
+    Map<String, Collection<Todo>> dispatchControl(String requestMethod, String command, Map<String, String[]> params) {
         Map<String, Collection<Todo>> attributes = new HashMap<>();
 
+        // TODO: No switch statement with boolean, how to do that cleanly?
         switch (command) {
             case "index":
                 handleIndex(attributes);

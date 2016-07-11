@@ -33,7 +33,7 @@ public final class JdkHttpServer implements Server {
             Map<String, String[]> parameters = (Map<String, String[]>) httpExchange.getAttribute("parameters");
             System.out.println(parameters.toString());
 
-            Map<String, Collection<Todo>> response = application.handle(url, parameters);
+            Map<String, Collection<Todo>> response = application.handle(method, url, parameters);
             String stringResponse = response.toString();
             httpExchange.sendResponseHeaders(200, stringResponse.length());
 
