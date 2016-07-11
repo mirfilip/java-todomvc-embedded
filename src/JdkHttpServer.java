@@ -35,7 +35,7 @@ public final class JdkHttpServer implements Server {
 
             Map<String, Collection<Todo>> response = application.handle(method, url, parameters);
             String stringResponse = response.toString();
-            httpExchange.sendResponseHeaders(200, stringResponse.length());
+            httpExchange.sendResponseHeaders(200, stringResponse.getBytes().length);
 
             OutputStream os = httpExchange.getResponseBody();
             os.write(stringResponse.getBytes());
