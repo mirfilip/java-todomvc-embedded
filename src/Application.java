@@ -1,3 +1,5 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -30,34 +32,47 @@ public class Application implements Controller {
         }
     }
 
-    public Map<String, Collection<Todo>> handle(String requestMethod, String requestUri, Map<String, String[]> params) {
-        String command = parseCommand(requestUri);
-        return dispatchControl(requestMethod, command, params);
+    public Map<String, Collection<Todo>> handle(String requestMethod, String requestUri, Map<String, String> params) throws InvalidArgumentException {
+        return dispatchControl(requestMethod, requestUri, params);
     }
 
-    Map<String, Collection<Todo>> dispatchControl(String requestMethod, String command, Map<String, String[]> params) {
+    Map<String, Collection<Todo>> dispatchControl(String requestMethod, String command, Map<String, String> params) throws InvalidArgumentException {
         Map<String, Collection<Todo>> attributes = new HashMap<>();
 
-        // TODO: No switch statement with boolean, how to do that cleanly?
-        switch (command) {
-            case "index":
-                handleIndex(attributes);
-                break;
-            case "new":
-                handleCreate(params.get("new-todo")[0]);
-                break;
-            case "toggle":
-                handleToggle(params.get("todo-id")[0]);
-                break;
-            case "delete":
-                handleDelete(params.get("todo-id")[0]);
-                break;
-            case "clear":
-                handleClear();
-                break;
+        System.out.println("Request method: " + requestMethod);
+        System.out.println("Request route: " + command);
+        System.out.println("Params: " + params.toString());
+
+        if (route(requestMethod, command, "GET", "/todos") || route(requestMethod, command, "GET", "/")) {
+            handleIndex(attributes);
+            return attributes;
         }
 
-        return attributes;
+        if (route(requestMethod, command, "POST", "/todos") || route(requestMethod, command, "POST", "/")) {
+            handleCreate(params.get("new-todo"));
+            return attributes;
+        }
+
+        if (route(requestMethod, command, "POST", "/toggleStatus")) {
+            handleToggle(params.get("todo-id"));
+            return attributes;
+        }
+
+        if (route(requestMethod, command, "POST", "/deleteTodo")) {
+            handleDelete(params.get("todo-id"));
+            return attributes;
+        }
+
+        if (route(requestMethod, command, "POST", "/clearTodo")) {
+            handleClear();
+            return attributes;
+        }
+
+        return attributes; // TODO: Handle 404 better
+    }
+
+    private boolean route(String requestMethod, String route, String expectedMethod, String expectedRoute) {
+        return expectedMethod.equalsIgnoreCase(requestMethod) && expectedRoute.equalsIgnoreCase(route);
     }
 
     private void handleClear() {
@@ -90,12 +105,5 @@ public class Application implements Controller {
 
         Todo changedTodo = new Todo(todo, toggledStatus);
         repository.save(changedTodo);
-    }
-
-    String parseCommand(String requestURI) {
-        int lastSlashIdx = requestURI.lastIndexOf("/");
-        int lastDotIdx = requestURI.lastIndexOf(".");
-
-        return requestURI.substring(lastSlashIdx + 1, lastDotIdx);
     }
 }

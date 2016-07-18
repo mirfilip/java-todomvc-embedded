@@ -1,6 +1,6 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpServer; // TODO: Is this good?
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,19 +30,33 @@ public final class JdkHttpServer implements Server {
             String method = httpExchange.getRequestMethod();
             String url = httpExchange.getRequestURI().toString();
 
-            Map<String, String[]> parameters = (Map<String, String[]>) httpExchange.getAttribute("parameters");
-            System.out.println(parameters.toString());
+            Map<String, String> parameters = (Map<String, String>) httpExchange.getAttribute("parameters");
 
-            Map<String, Collection<Todo>> response = application.handle(method, url, parameters);
-            String stringResponse = response.toString();
-            httpExchange.sendResponseHeaders(200, stringResponse.getBytes().length);
+            Map<String, Collection<Todo>> response = null;
+            String stringResponse = "";
 
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(stringResponse.getBytes());
-            os.close();
+            try {
+                response = application.handle(method, url, parameters);
+
+                if (method.equalsIgnoreCase("POST")) {
+                    httpExchange.getResponseHeaders().set("Location", "/");
+                    httpExchange.sendResponseHeaders(303, -1);
+                } else {
+                    stringResponse = response.toString();
+
+                    httpExchange.sendResponseHeaders(200, stringResponse.getBytes().length);
+                    OutputStream os = httpExchange.getResponseBody();
+                    os.write(stringResponse.getBytes());
+                    os.close();
+                }
+            } catch (Exception e) {
+                stringResponse = e.getMessage();
+                e.printStackTrace();
+
+                httpExchange.sendResponseHeaders(500, stringResponse.getBytes().length);
+            }
         }
     }
-
 
     @Override
     public Application getApplication() {
