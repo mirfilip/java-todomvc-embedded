@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public class Todo implements Serializable {
     public enum Status {
-        ACTIVE(""),
+        ACTIVE("active"),
         COMPLETED("completed");
 
         private final String css;
