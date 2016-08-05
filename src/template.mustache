@@ -22,8 +22,8 @@
             <form method="post" action="toggleStatus">
                 <input type="hidden" name="todo-id" value="{{id}}" />
                 <button class="toggle"></button>
+                <label>{{todo}}</label>
             </form>
-            <a href="toggleStatus?todo-id={{id}}"><span class="toggle"></span></a><label>{{todo}}</label>
             <form method="post" action="deleteTodo">
                 <input type="hidden" name="todo-id" value="{{id}}" /><button class="destroy"></button></form>
           </div>

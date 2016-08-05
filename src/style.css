@@ -211,6 +211,7 @@ label[for='toggle-all'] {
 }
 
 #todo-list li .toggle {
+    cursor: pointer;
     text-align: center;
     width: 40px;
     /* auto, since non-WebKit browsers doesn't support input styling */
