@@ -24,10 +24,8 @@ public final class JdkHttpServer implements Server {
 
         server = HttpServer.create(new InetSocketAddress(8000), 0);
 
-        // TODO: Is there any sane way to serve static content with com.sun.net.httpserver?
         server.createContext("/css/", new StaticContentHandler());
 
-        // TODO: With such approach, how to handle not existing paths?
         JdkHttpServerParamsFilter paramExtractor = new JdkHttpServerParamsFilter();
 
         server.createContext("/todos", new KnownContextHandler())
@@ -44,7 +42,6 @@ public final class JdkHttpServer implements Server {
 
         server.createContext("/", new DefaultHandler())
                 .getFilters().add(paramExtractor);
-
 
         server.setExecutor(null);
     }
