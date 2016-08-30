@@ -47,3 +47,8 @@ Done on my own:
 Overall:
 * [ ] Check http://mockrunner.github.io/
 * [ ] Check https://dzone.com/articles/obmimic-10-released-out
+
+# Week 6
+* [ ] Build tool
+
+29.08/30.08 - ostatnie dni Mateusz
