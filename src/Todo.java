@@ -74,9 +74,7 @@ public class Todo implements Serializable {
 
         Todo todo1 = (Todo) o;
 
-        if (!todo.equals(todo1.todo)) return false;
-        if (!id.equals(todo1.id)) return false;
-        return status == todo1.status;
+        return todo.equals(todo1.todo) && id.equals(todo1.id) && status == todo1.status;
 
     }
 
